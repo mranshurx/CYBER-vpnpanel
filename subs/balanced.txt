@@ -1,11 +1,5 @@
-[Interface]
-PrivateKey = OJIZl5FvcjiJZrhs+S9vmrm5IkVHpmdWf207M0WSaFc=
-Address = 172.16.0.2/32, fd01:5ca1:ab1e:80fa:ab85:6eea:213f:f4a5/128
-DNS = 1.1.1.1, 2606:4700:4700::1111
-MTU = 1360
-
-[Peer]
-PublicKey = bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=
-AllowedIPs = 0.0.0.0/0, ::/0
-Endpoint = engage.cloudflareclient.com:2408
-PersistentKeepalive = 25
+#profile-title: FF OB55 BALANCED
+#subscription-autoconnect: 1
+#per-app-proxy-mode: on
+#per-app-proxy-list: com.dts.freefireth,com.dts.freefiremax
+wireguard://OJIZl5FvcjiJZrhs+S9vmrm5IkVHpmdWf207M0WSaFc=@engage.cloudflareclient.com:2408?publickey=bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=&address=172.16.0.2&mtu=1360#FF-BALANCED
