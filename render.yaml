@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: ff-headshot-panel
+    name: cyber-vpnpanel
     runtime: static
     buildCommand: echo "static build"
     staticPublishPath: .
