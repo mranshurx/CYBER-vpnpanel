@@ -1,0 +1,8 @@
+# CYBER vpnpanel
+FF OB55 headshot panel. Tap "ADD TO HAPP" -> imports a tuned WireGuard tunnel into Happ.
+
+Presets: MAX HS (mtu 1280) / BALANCED (1360) / STABLE (1420)
+Only Free Fire (com.dts.freefireth, com.dts.freefiremax) is routed.
+
+Set KEY (and RESERVED if you have one) in index.html.
+Set the same key in all three files in subs/.
