@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ff-headshot-panel
+    runtime: static
+    buildCommand: echo "static build"
+    staticPublishPath: .
+    headers:
+      - path: /subs/*
+        name: Content-Type
+        value: text/plain; charset=utf-8
+      - path: /subs/*
+        name: Cache-Control
+        value: public, max-age=300
