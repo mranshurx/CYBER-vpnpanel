@@ -56,10 +56,11 @@
     border:1px solid var(--line);background:#0b110e;color:var(--txt);
     font-size:13px;font-weight:700;text-decoration:none;
   }
+  .btn:active{background:#131c17}
   pre{
     background:#070a08;border:1px solid var(--line);border-radius:12px;
-    padding:13px;font-size:10.5px;line-height:1.6;overflow-x:auto;
-    color:#9fe7bd;margin:0;white-space:pre;
+    padding:13px;font-size:10px;line-height:1.65;overflow-x:auto;
+    color:#9fe7bd;margin:0;white-space:pre-wrap;word-break:break-all;
   }
   ol{margin:0;padding-left:19px;color:var(--muted);font-size:13.5px;line-height:1.85}
   ol b{color:var(--txt)}
@@ -114,38 +115,51 @@
 
   <div class="foot">
     No root · nothing installed into Free Fire · no ban risk<br/>
-    Tunnel only changes how your traffic reaches the server.
+    Only Free Fire is routed through the tunnel.
   </div>
 </div>
 
 <script>
-  // ====== EDIT THESE TWO LINES ======
-  const BASE = "https://YOUR-USERNAME.github.io/ff-headshot-panel";
-  const KEY  = "PASTE_YOUR_WARP_PRIVATE_KEY=";
-  // ==================================
+  // ==========================================================
+  //  EDIT THESE
+  // ==========================================================
 
-  const SUBDIR   = "/subs/";
-  const WARP_PUB = "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=";
-  const WARP_END = "engage.cloudflareclient.com:2408";
+  // your WARP private key, from `wgcf generate` -> PrivateKey line
+  const KEY = "PASTE_YOUR_WARP_PRIVATE_KEY=";
+
+  // OPTIONAL. If your wgcf-profile.conf has a "# Reserved: 1,2,3" line,
+  // paste those three numbers here. Otherwise leave it empty.
+  const RESERVED = "";
+
+  // ==========================================================
+
+  // auto-detects this site's own address (Render, GitHub Pages, anywhere)
+  const BASE   = new URL('.', location.href).href.replace(/\/$/, '');
+  const SUBDIR = "/subs/";
+
+  const WARP_PUB  = "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=";
+  const WARP_HOST = "engage.cloudflareclient.com:2408";
+  const WARP_ADDR = "172.16.0.2";
 
   const P = {
-    "stable":   { file:"stable.txt",   mtu:1420 },
-    "balanced": { file:"balanced.txt", mtu:1360 },
-    "max-hs":   { file:"max-hs.txt",   mtu:1280 }
+    "stable":   { file:"stable.txt",   mtu:1420, tag:"STABLE"   },
+    "balanced": { file:"balanced.txt", mtu:1360, tag:"BALANCED" },
+    "max-hs":   { file:"max-hs.txt",   mtu:1280, tag:"MAX HS"   }
   };
 
-  function conf(mtu){
-    return `[Interface]
-PrivateKey = ${KEY}
-Address = 172.16.0.2/32, fd01:5ca1:ab1e:80fa:ab85:6eea:213f:f4a5/128
-DNS = 1.1.1.1, 2606:4700:4700::1111
-MTU = ${mtu}
-
-[Peer]
-PublicKey = ${WARP_PUB}
-AllowedIPs = 0.0.0.0/0, ::/0
-Endpoint = ${WARP_END}
-PersistentKeepalive = 25`;
+  function link(mtu, tag){
+    let u = "wireguard://" + KEY + "@" + WARP_HOST +
+            "?publickey=" + WARP_PUB +
+            "&address=" + WARP_ADDR +
+            "&mtu=" + mtu;
+    if (RESERVED) u += "&reserved=" + RESERVED;
+    return [
+      "#profile-title: FF OB55 " + tag,
+      "#subscription-autoconnect: 1",
+      "#per-app-proxy-mode: on",
+      "#per-app-proxy-list: com.dts.freefireth,com.dts.freefiremax",
+      u + "#FF-" + tag.replace(/\s+/g,"-")
+    ].join("\n");
   }
 
   let cur = "max-hs";
@@ -155,7 +169,7 @@ PersistentKeepalive = 25`;
     const subUrl = BASE + SUBDIR + p.file;
     document.getElementById("go").href = "happ://add/" + encodeURIComponent(subUrl);
     document.getElementById("go").dataset.sub = subUrl;
-    document.getElementById("preview").textContent = conf(p.mtu);
+    document.getElementById("preview").textContent = link(p.mtu, p.tag);
     document.getElementById("qrimg").src =
       "https://api.qrserver.com/v1/create-qr-code/?size=420x420&data=" + encodeURIComponent(subUrl);
   }
